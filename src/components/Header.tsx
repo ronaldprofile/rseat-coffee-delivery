@@ -4,7 +4,7 @@ import logoCoffeeDelivery from "../assets/logo.svg";
 
 export function Header() {
   return (
-    <header className="w-full">
+    <header className="w-full sticky top-0 left-0 z-10 bg-gray-100 shadow">
       <div className="w-full max-w-[1120px] mx-auto py-8 flex items-center justify-between">
         <Link to="/">
           <img src={logoCoffeeDelivery} />
