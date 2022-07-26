@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useCart } from "../../../context/Cart/CartContext";
 import { ShoppingCart } from "phosphor-react";
 import { formatPrice } from "../../../utils/formatCurrency";
 import { QuantityCounter } from "../../../components/QuantityCounter";
@@ -16,9 +18,28 @@ interface CoffeeProps {
 }
 
 export function CoffeeCard({ coffee }: CoffeeProps) {
+  const [quantityCoffee, setQuantityCoffee] = useState(1);
+  const { addCoffeeToCart } = useCart();
+
+  function handleIncreaseQuantityCoffee() {
+    setQuantityCoffee((state) => state + 1);
+  }
+
+  function handleDecreaseQuantityCoffee() {
+    setQuantityCoffee((state) => state - 1);
+  }
+
+  function handleAddToCart() {
+    const newCoffee = {
+      ...coffee,
+      quantity: quantityCoffee,
+    };
+
+    addCoffeeToCart(newCoffee);
+  }
+
   const formattedPrice = formatPrice(coffee.price);
-  
-  
+
   return (
     <div className="bg-gray-200 rounded-t-md rounded-b-[36px] pb-5 px-5 flex flex-col items-center text-center relative">
       <img src={`/coffees/${coffee.photo}`} className="-mt-5" />
@@ -45,13 +66,20 @@ export function CoffeeCard({ coffee }: CoffeeProps) {
 
       <div className="w-full flex items-center justify-between">
         <div className="text-gray-700">
-          <span className="text-sm">R$ {" "}</span>
+          <span className="text-sm">R$ </span>
           <span className="font-bold text-2xl">{formattedPrice}</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <QuantityCounter />
-          <button className="h-[38px] flex items-center justify-center p-2 bg-purple-800 text-white rounded-md hover:bg-purple-700 transition-colors">
+          <QuantityCounter
+            onIncrease={handleIncreaseQuantityCoffee}
+            onDecrease={handleDecreaseQuantityCoffee}
+            quantity={quantityCoffee}
+          />
+          <button
+            onClick={handleAddToCart}
+            className="h-[38px] flex items-center justify-center p-2 bg-purple-800 text-white rounded-md hover:bg-purple-700 transition-colors"
+          >
             <ShoppingCart size={22} weight="fill" />
           </button>
         </div>
